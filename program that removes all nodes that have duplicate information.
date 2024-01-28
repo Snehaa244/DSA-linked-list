@@ -1,0 +1,68 @@
+#include <iostream>
+#include <unordered_set>
+
+using namespace std;
+
+// Definition for singly-linked list node
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+void removeDuplicates(ListNode* head) {
+    if (head == nullptr) return;
+
+    unordered_set<int> seen;
+    ListNode *prev = nullptr, *curr = head;
+
+    while (curr != nullptr) {
+        if (seen.find(curr->val) != seen.end()) {
+            // Remove duplicate node
+            prev->next = curr->next;
+            delete curr;
+            curr = prev->next;
+        } else {
+            seen.insert(curr->val);
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+}
+
+// Utility function to print the linked list
+void printList(ListNode* head) {
+    ListNode* temp = head;
+    while (temp != nullptr) {
+        cout << temp->val << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    // Example usage
+    ListNode* head = new ListNode(1);
+    head->next = new ListNode(2);
+    head->next->next = new ListNode(3);
+    head->next->next->next = new ListNode(2);
+    head->next->next->next->next = new ListNode(4);
+    head->next->next->next->next->next = new ListNode(3);
+
+    cout << "Original List: ";
+    printList(head);
+
+    removeDuplicates(head);
+
+    cout << "List after removing duplicates: ";
+    printList(head);
+
+    // Free memory
+    while (head != nullptr) {
+        ListNode* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    return 0;
+}
