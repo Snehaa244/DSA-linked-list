@@ -1,0 +1,77 @@
+#include <iostream>
+
+using namespace std;
+
+// Definition for singly-linked list node
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// Function to insert a node at the end of the circular linked list
+void insert(ListNode*& head, int val) {
+    ListNode* newNode = new ListNode(val);
+    if (head == nullptr) {
+        head = newNode;
+        head->next = head; // Point to itself for circularity
+    } else {
+        ListNode* temp = head;
+        while (temp->next != head) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->next = head; // Make it circular
+    }
+}
+
+// Function to print the circular linked list
+void printList(ListNode* head) {
+    if (head == nullptr) {
+        cout << "Empty circular linked list" << endl;
+        return;
+    }
+    ListNode* temp = head;
+    do {
+        cout << temp->val << " ";
+        temp = temp->next;
+    } while (temp != head);
+    cout << endl;
+}
+
+// Function to copy the circular linked list
+ListNode* copyCircularList(ListNode* head) {
+    if (head == nullptr) return nullptr;
+
+    ListNode* original = head;
+    ListNode* copied = nullptr;
+    ListNode* tail = nullptr;
+
+    // Copy the original circular linked list
+    do {
+        ListNode* newNode = new ListNode(original->val);
+        if (copied == nullptr) {
+            copied = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        original = original->next;
+    } while (original != head);
+
+    // Make the copied list circular
+    tail->next = copied;
+
+    return copied;
+}
+
+int main() {
+    ListNode* head = nullptr;
+    insert(head, 1);
+    insert(head, 2);
+    insert(head, 3);
+    insert(head, 4);
+    insert(head, 5);
+
+    cout << "Origina
