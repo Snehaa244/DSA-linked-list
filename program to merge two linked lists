@@ -1,0 +1,103 @@
+#include <iostream>
+
+using namespace std;
+
+// Definition for singly-linked list node
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// Function to insert a node at the end of the linked list
+void insert(ListNode*& head, int val) {
+    ListNode* newNode = new ListNode(val);
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        ListNode* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Function to print the linked list
+void printList(ListNode* head) {
+    ListNode* temp = head;
+    while (temp != nullptr) {
+        cout << temp->val << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+// Function to merge two linked lists
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &dummy;
+
+    while (l1 != nullptr && l2 != nullptr) {
+        if (l1->val < l2->val) {
+            tail->next = l1;
+            l1 = l1->next;
+        } else {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
+    }
+
+    if (l1 != nullptr) {
+        tail->next = l1;
+    } else {
+        tail->next = l2;
+    }
+
+    return dummy.next;
+}
+
+int main() {
+    // Example usage
+    ListNode* l1 = nullptr;
+    insert(l1, 1);
+    insert(l1, 3);
+    insert(l1, 5);
+
+    ListNode* l2 = nullptr;
+    insert(l2, 2);
+    insert(l2, 4);
+    insert(l2, 6);
+
+    cout << "List 1: ";
+    printList(l1);
+    cout << "List 2: ";
+    printList(l2);
+
+    ListNode* mergedList = mergeTwoLists(l1, l2);
+
+    cout << "Merged List: ";
+    printList(mergedList);
+
+    // Free memory
+    while (l1 != nullptr) {
+        ListNode* temp = l1;
+        l1 = l1->next;
+        delete temp;
+    }
+
+    while (l2 != nullptr) {
+        ListNode* temp = l2;
+        l2 = l2->next;
+        delete temp;
+    }
+
+    while (mergedList != nullptr) {
+        ListNode* temp = mergedList;
+        mergedList = mergedList->next;
+        delete temp;
+    }
+
+    return 0;
+}
